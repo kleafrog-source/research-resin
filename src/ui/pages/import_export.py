@@ -38,7 +38,7 @@ class ResinDataImporter:
         try:
             return json.loads(file_content)
         except json.JSONDecodeError as e:
-            st.error(f"Ошибка при чтении JSON: {e}")
+            st.error(f"Error reading JSON: {e}")
             return {}
     
     @staticmethod
@@ -47,7 +47,7 @@ class ResinDataImporter:
         try:
             return pd.read_csv(io.StringIO(file_content))
         except Exception as e:
-            st.error(f"Ошибка при чтении CSV: {e}")
+            st.error(f"Error reading CSV: {e}")
             return pd.DataFrame()
 
 
@@ -62,9 +62,9 @@ def show_import_export_page(
         base_resin_props: Dictionary of base resin properties
         single_ion_states: Dictionary mapping ions to their states
     """
-    st.header("🔄 Импорт/Экспорт Данных")
+    st.header("🔄 Import/Export Data")
     
-    format_type = st.selectbox("Формат", ["JSON", "CSV"])
+    format_type = st.selectbox("Format", ["JSON", "CSV"])
     
     if format_type == "JSON":
         # Prepare data for export
@@ -80,7 +80,7 @@ def show_import_export_page(
         json_str = ResinDataExporter.to_json(data_to_export)
         
         st.download_button(
-            label="Экспорт JSON",
+            label="Export JSON",
             data=json_str,
             file_name="resin_data.json",
             mime="application/json"
@@ -88,7 +88,7 @@ def show_import_export_page(
         
         # Import JSON
         uploaded_file = st.file_uploader(
-            "Импорт JSON", 
+            "Import JSON",
             type="json",
             key="json_uploader"
         )
@@ -98,17 +98,17 @@ def show_import_export_page(
                 imported_data = ResinDataImporter.from_json(
                     uploaded_file.getvalue().decode()
                 )
-                st.success("Данные успешно загружены!")
+                st.success("Data loaded successfully!")
                 st.json(imported_data)
             except Exception as e:
-                st.error(f"Ошибка при загрузке файла: {e}")
+                st.error(f"Error loading file: {e}")
     
     elif format_type == "CSV":
         # Export CSV
         csv_data = ResinDataExporter.to_csv(single_ion_states)
         
         st.download_button(
-            label="Экспорт CSV (Состояния ионов)",
+            label="Export CSV (Ion States)",
             data=csv_data,
             file_name="ion_states.csv",
             mime="text/csv"
@@ -116,7 +116,7 @@ def show_import_export_page(
         
         # Import CSV
         uploaded_file = st.file_uploader(
-            "Импорт CSV", 
+            "Import CSV",
             type="csv",
             key="csv_uploader"
         )
@@ -127,7 +127,7 @@ def show_import_export_page(
                     uploaded_file.getvalue().decode()
                 )
                 if not df.empty:
-                    st.success("Данные успешно загружены!")
+                    st.success("Data loaded successfully!")
                     st.dataframe(df)
             except Exception as e:
-                st.error(f"Ошибка при загрузке файла: {e}")
+                st.error(f"Error loading file: {e}")

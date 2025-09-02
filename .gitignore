@@ -1,9 +1,22 @@
-echo "__pycache__/" > .gitignore
-echo "*.py[cod]" >> .gitignore
-echo "*.log" >> .gitignore
-echo ".env" >> .gitignore
-echo "venv/" >> .gitignore
-echo ".pytest_cache/" >> .gitignore
-echo "*.egg-info/" >> .gitignore
-echo "dist/" >> .gitignore
-echo "build/" >> .gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Custom
+vendor/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+*.log

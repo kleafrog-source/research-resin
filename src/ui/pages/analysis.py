@@ -27,8 +27,8 @@ def plot_degradation(states: List[Tuple[int, ComputationalState]], property_name
     
     plt.figure(figsize=(10, 5))
     plt.plot(cycles, values, 'b-o')
-    plt.title(f'Деградация свойства: {property_name}')
-    plt.xlabel('Количество циклов')
+    plt.title(f'Property Degradation: {property_name}')
+    plt.xlabel('Number of Cycles')
     plt.ylabel(property_name)
     plt.grid(True)
     st.pyplot(plt)
@@ -40,12 +40,12 @@ def show_analysis_page(base_resin_props: Dict) -> None:
     Args:
         base_resin_props: Dictionary of base resin properties
     """
-    st.header("📈 Анализ и Визуализации")
+    st.header("📈 Analysis and Visualization")
     
-    analysis_type = st.selectbox("Тип анализа", ["Кластеризация", "Регрессия", "Деградация"])
+    analysis_type = st.selectbox("Analysis Type", ["Clustering", "Regression", "Degradation"])
     
-    if analysis_type == "Кластеризация":
-        st.subheader("Кластеризация Состояний Ионов")
+    if analysis_type == "Clustering":
+        st.subheader("Clustering of Ion States")
         
         # Generate ion states if not in session state
         if 'ion_states' not in st.session_state:
@@ -68,7 +68,7 @@ def show_analysis_page(base_resin_props: Dict) -> None:
                 ])
         
         if not features:
-            st.warning("Нет данных о состояниях ионов для кластеризации.")
+            st.warning("No ion state data available for clustering.")
             return
         
         # Scale features
@@ -76,7 +76,7 @@ def show_analysis_page(base_resin_props: Dict) -> None:
         scaled_features = scaler.fit_transform(features)
         
         # Let user choose number of clusters
-        n_clusters = st.slider("Количество кластеров", 2, min(10, len(ions)), 3)
+        n_clusters = st.slider("Number of Clusters", 2, min(10, len(ions)), 3)
         
         # Perform K-means clustering
         kmeans = KMeans(n_clusters=n_clusters, random_state=42)
@@ -84,37 +84,37 @@ def show_analysis_page(base_resin_props: Dict) -> None:
         
         # Create DataFrame for visualization
         df = pd.DataFrame(features, columns=[
-            'Проводимость', 'Каталитическая активность', 
-            'Структурная роль', 'Тепловыделение',
-            'Трение', 'Оптическое качество'
+            'Conductivity', 'Catalytic Activity',
+            'Structural Role', 'Thermal Power',
+            'Tribological Performance', 'Optical Quality'
         ])
-        df['Ион'] = ions
-        df['Кластер'] = cluster_labels
+        df['Ion'] = ions
+        df['Cluster'] = cluster_labels
         
         # 3D Scatter plot using plotly
-        st.subheader("3D Визуализация Кластеров")
+        st.subheader("3D Cluster Visualization")
         
         col1, col2, col3 = st.columns(3)
         with col1:
-            x_axis = st.selectbox("Ось X", df.columns[:-2], index=0)
+            x_axis = st.selectbox("X-Axis", df.columns[:-2], index=0)
         with col2:
-            y_axis = st.selectbox("Ось Y", df.columns[:-2], index=1)
+            y_axis = st.selectbox("Y-Axis", df.columns[:-2], index=1)
         with col3:
-            z_axis = st.selectbox("Ось Z", df.columns[:-2], index=2)
+            z_axis = st.selectbox("Z-Axis", df.columns[:-2], index=2)
         
         fig = px.scatter_3d(
             df, 
             x=x_axis, 
             y=y_axis, 
             z=z_axis,
-            color='Кластер',
-            hover_name='Ион',
-            title=f'Кластеризация ионов по свойствам',
+            color='Cluster',
+            hover_name='Ion',
+            title=f'Clustering of Ions by Properties',
             labels={
                 x_axis: x_axis,
                 y_axis: y_axis,
                 z_axis: z_axis,
-                'Кластер': 'Кластер'
+                'Cluster': 'Cluster'
             },
             color_continuous_scale=px.colors.sequential.Viridis
         )
@@ -139,7 +139,7 @@ def show_analysis_page(base_resin_props: Dict) -> None:
         st.plotly_chart(fig, use_container_width=True)
         
         # Show cluster centers
-        st.subheader("Центры Кластеров")
+        st.subheader("Cluster Centers")
         cluster_centers = scaler.inverse_transform(kmeans.cluster_centers_)
         centers_df = pd.DataFrame(
             cluster_centers,
@@ -148,59 +148,59 @@ def show_analysis_page(base_resin_props: Dict) -> None:
         st.dataframe(centers_df, use_container_width=True)
         
         # Show cluster members
-        st.subheader("Состав Кластеров")
+        st.subheader("Cluster Composition")
         for cluster_id in range(n_clusters):
-            cluster_members = df[df['Кластер'] == cluster_id]['Ион'].tolist()
-            st.write(f"**Кластер {cluster_id + 1}** ({len(cluster_members)} ионов): {', '.join(cluster_members)}")
+            cluster_members = df[df['Cluster'] == cluster_id]['Ion'].tolist()
+            st.write(f"**Cluster {cluster_id + 1}** ({len(cluster_members)} ions): {', '.join(cluster_members)}")
     
-    elif analysis_type == "Регрессия":
-        st.subheader("Анализ Регрессии")
+    elif analysis_type == "Regression":
+        st.subheader("Regression Analysis")
         
         # Example regression results (would come from actual analysis)
         regression_results = {
-            'conductivity': [('Гидратация', 100.0), ('Энергия', 85.2), 
-                           ('Селективность', 42.1), ('Заряд', 15.8)],
-            'catalytic_activity': [('Заряд', 100.0), ('Селективность', 78.3), 
-                                 ('Энергия', 45.6), ('Гидратация', 22.1)],
-            'tribological': [('Энергия', 100.0), ('Заряд', 72.4), 
-                           ('Селективность', 38.9), ('Гидратация', 18.5)]
+            'conductivity': [('Hydration', 100.0), ('Energy', 85.2),
+                           ('Selectivity', 42.1), ('Charge', 15.8)],
+            'catalytic_activity': [('Charge', 100.0), ('Selectivity', 78.3),
+                                 ('Energy', 45.6), ('Hydration', 22.1)],
+            'tribological': [('Energy', 100.0), ('Charge', 72.4),
+                           ('Selectivity', 38.9), ('Hydration', 18.5)]
         }
         
         selected_property = st.selectbox(
-            "Выберите свойство для анализа",
+            "Select property for analysis",
             list(regression_results.keys())
         )
         
         if selected_property in regression_results:
             df = pd.DataFrame(
                 regression_results[selected_property],
-                columns=['Фактор', 'Влияние (%)']
+                columns=['Factor', 'Influence (%)']
             )
             st.dataframe(df, hide_index=True)
             
             # Simple bar chart
             fig, ax = plt.subplots()
-            ax.bar(df['Фактор'], df['Влияние (%)'])
-            ax.set_ylabel('Влияние (%)')
-            ax.set_title(f'Влияние факторов на {selected_property}')
+            ax.bar(df['Factor'], df['Influence (%)'])
+            ax.set_ylabel('Influence (%)')
+            ax.set_title(f'Influence of factors on {selected_property}')
             st.pyplot(fig)
     
-    elif analysis_type == "Деградация":
-        st.subheader("Симуляция Деградации")
+    elif analysis_type == "Degradation":
+        st.subheader("Degradation Simulation")
         
         ion = st.selectbox(
-            "Выберите ион",
+            "Select ion",
             [i.value for i in IonFirmware if i != IonFirmware.MIXED]
         )
         
-        cycles = st.slider("Максимальное количество циклов", 1, 1000, 100)
-        step = st.slider("Шаг отображения", 1, 100, 10)
+        cycles = st.slider("Maximum number of cycles", 1, 1000, 100)
+        step = st.slider("Display step", 1, 100, 10)
         resin_grade = st.selectbox(
-            "Качество смолы", 
-            ["высший", "первый", "базовый"]
+            "Resin Quality",
+            ["premium", "first", "basic"]
         )
         
-        if st.button("Анализировать"):
+        if st.button("Analyze"):
             ion_enum = IonFirmware(ion)
             initial_state = apply_firmware(None, ion_enum, base_resin_props)
             
@@ -220,5 +220,5 @@ def show_analysis_page(base_resin_props: Dict) -> None:
                 plot_degradation(states, prop)
             
             # Show final state
-            st.subheader("Финальное состояние")
+            st.subheader("Final State")
             st.json(asdict(states[-1][1]))
