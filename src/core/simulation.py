@@ -3,7 +3,7 @@ Core simulation logic for the resin application.
 """
 from typing import Dict, List, Optional, Tuple, Any
 import numpy as np
-from ..models import ComputationalState, IonFirmware
+from ..models import ComputationalState, IonFirmware, Resin
 from .semantics import get_ion_semantics
 
 # Base resin properties
@@ -173,3 +173,58 @@ def mixed_ion_state(ion1: IonFirmware, ion2: IonFirmware,
         tribological_performance=mixed_tribo,
         optical_quality=mixed_optical
     )
+
+def simulate_toc_removal(resin: Resin, contaminant: str, initial_toc: float, ph: float) -> Dict[str, Any]:
+    """
+    Simulates the removal of Total Organic Carbon (TOC) from water.
+
+    This is a simplified, rule-based model.
+
+    Args:
+        resin: The Resin object with its properties.
+        contaminant: The name of the organic contaminant.
+        initial_toc: The initial TOC concentration in mg/L.
+        ph: The pH of the water.
+
+    Returns:
+        A dictionary with the simulation results.
+    """
+    # Base efficiency based on resin structure
+    if resin.structure == "Macroporous":
+        base_efficiency = 0.85  # Macroporous resins are better for large organics
+    elif resin.structure == "Gel":
+        base_efficiency = 0.60
+    else:
+        base_efficiency = 0.70
+
+    # Adjust efficiency based on contaminant type (higher MW is harder to remove)
+    if contaminant == "Humic Acid":
+        base_efficiency -= 0.10
+    elif contaminant == "Tannic Acid":
+        base_efficiency -= 0.05
+    # Fulvic acid is smaller, so no penalty
+
+    # Adjust efficiency based on pH
+    # Anion exchange for organic acids is typically better at slightly acidic to neutral pH
+    if ph < 6.0:
+        base_efficiency += 0.05
+    elif ph > 8.0:
+        base_efficiency -= 0.10
+
+    # Apply a simple fouling factor based on resin type
+    if resin.type and "Acrylic" in resin.type:
+        fouling_factor = 0.98 # Acrylic resins often have better fouling resistance
+    else:
+        fouling_factor = 0.95
+
+    final_efficiency = base_efficiency * fouling_factor
+
+    # Ensure efficiency is within a reasonable range
+    final_efficiency = max(0, min(final_efficiency, 0.99))
+
+    final_toc = initial_toc * (1 - final_efficiency)
+
+    return {
+        "predicted_removal_efficiency": final_efficiency,
+        "final_toc_mg_l": final_toc,
+    }

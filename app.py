@@ -31,6 +31,8 @@ from src.ui.pages.analysis import show_analysis_page
 from src.ui.pages.import_export import show_import_export_page
 from src.ui.pages.prediction import show_prediction_interface
 from src.ui.pages.advanced_analysis import show_advanced_analysis
+from src.ui.pages.glossary_page import show_glossary_page
+from src.ui.pages.toc_removal_page import show_toc_removal_page
 
 # Set page config
 st.set_page_config(
@@ -67,7 +69,7 @@ if 'predictor' not in st.session_state:
 st.sidebar.title("Navigation")
 page = st.sidebar.radio(
     "Select a section:",
-    ["Resin Data", "Simulation", "Analysis", "Prediction", "Advanced Analysis", "Import/Export"],
+    ["Resin Data", "Simulation", "TOC Removal", "Analysis", "Prediction", "Advanced Analysis", "Glossary", "Import/Export"],
     index=0
 )
 
@@ -77,6 +79,9 @@ if page == "Resin Data":
     
 elif page == "Simulation":
     show_simulation_page(st.session_state.resin_props)
+
+elif page == "TOC Removal":
+    show_toc_removal_page()
     
 elif page == "Analysis":
     show_analysis_page(st.session_state.resin_props)
@@ -86,6 +91,9 @@ elif page == "Prediction":
     
 elif page == "Advanced Analysis":
     show_advanced_analysis(st.session_state.ion_states)
+
+elif page == "Glossary":
+    show_glossary_page()
     
 elif page == "Import/Export":
     show_import_export_page(st.session_state.resin_props, st.session_state.ion_states)
