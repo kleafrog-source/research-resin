@@ -1,0 +1,55 @@
+[
+  {
+    "name": "CalRes 2304",
+    "manufacturer": "Calgon Carbon",
+    "type": "Strong-Base Anion (SBA)",
+    "structure": "Gel",
+    "functional_group": "N-tri-butylamine",
+    "ionic_form": "Cl-",
+    "anion_exchange_capacity_min_meq_ml": 0.65,
+    "specific_volume_g_ml": "0.35-0.45",
+    "water_retention_capacity_percent": "37-47",
+    "mean_diameter_um": 750,
+    "uniformity_coefficient": 1.7,
+    "max_temp_c": 100
+  },
+  {
+    "name": "Purofine PFA694E",
+    "manufacturer": "Purolite",
+    "type": "Strong-Base Anion (SBA)",
+    "structure": "Gel",
+    "functional_group": "Complex Amino",
+    "ionic_form": "Cl-",
+    "anion_exchange_capacity_min_meq_ml": 0.5,
+    "anion_exchange_capacity_max_meq_ml": 0.9,
+    "specific_volume_g_ml": "0.33-0.43",
+    "water_retention_capacity_percent": "38-50",
+    "mean_diameter_um": 675,
+    "uniformity_coefficient": 1.3,
+    "max_temp_c": 100
+  },
+  {
+    "name": "DOWEX PSR2 Plus Cl",
+    "manufacturer": "DuPont",
+    "type": "Strong-Base Anion (SBA)",
+    "structure": "Gel",
+    "functional_group": "Tri-N-butylamine",
+    "ionic_form": "Cl-",
+    "anion_exchange_capacity_min_meq_ml": 0.7,
+    "specific_volume_g_ml": "0.45-0.52",
+    "water_retention_capacity_percent": "25-35",
+    "mean_diameter_um": 700,
+    "uniformity_coefficient": 1.1,
+    "max_temp_c": 100
+  },
+  {
+    "name": "S930",
+    "manufacturer": "Generic (from paper)",
+    "type": "Chelating",
+    "structure": "Macroporous",
+    "functional_group": "Isothiouronium",
+    "ionic_form": "H+",
+    "mercury_capacity_g_dm3": 275,
+    "water_retention_capacity_percent": "48-54"
+  }
+]

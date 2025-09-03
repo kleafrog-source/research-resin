@@ -31,22 +31,24 @@ from src.ui.pages.analysis import show_analysis_page
 from src.ui.pages.import_export import show_import_export_page
 from src.ui.pages.prediction import show_prediction_interface
 from src.ui.pages.advanced_analysis import show_advanced_analysis
+from src.ui.pages.glossary_page import show_glossary_page
+from src.ui.pages.toc_removal_page import show_toc_removal_page
 
 # Set page config
 st.set_page_config(
-    page_title="Исследование ионного обмена",
+    page_title="Ion Exchange Research",
     page_icon="🧪",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # Set page title and description
-st.title("🧪 Исследование ионного обмена в полимерных смолах")
+st.title("🧪 Ion Exchange in Polymer Resins Research")
 st.markdown("""
-    ### Симуляция и анализ ионного обмена в ионообменных смолах
+    ### Simulation and Analysis of Ion Exchange in Ion-Exchange Resins
     
-    Это приложение моделирует поведение ионообменных смол при взаимодействии с различными ионами.
-    Вы можете анализировать состояние смолы, проводить симуляции и визуализировать результаты.
+    This application simulates the behavior of ion-exchange resins when interacting with various ions.
+    You can analyze the state of the resin, run simulations, and visualize the results.
 """)
 
 # Initialize session state
@@ -64,39 +66,45 @@ if 'predictor' not in st.session_state:
     st.session_state.predictor.train_models(st.session_state.ion_states)
 
 # Sidebar with navigation
-st.sidebar.title("Навигация")
+st.sidebar.title("Navigation")
 page = st.sidebar.radio(
-    "Выберите раздел:",
-    ["Данные смолы", "Симуляция", "Анализ", "Прогнозирование", "Расширенный анализ", "Импорт/Экспорт"],
+    "Select a section:",
+    ["Resin Data", "Simulation", "TOC Removal", "Analysis", "Prediction", "Advanced Analysis", "Glossary", "Import/Export"],
     index=0
 )
 
 # Load the appropriate page based on selection
-if page == "Данные смолы":
+if page == "Resin Data":
     show_data_view(st.session_state.resin_props, st.session_state.ion_states)
     
-elif page == "Симуляция":
+elif page == "Simulation":
     show_simulation_page(st.session_state.resin_props)
+
+elif page == "TOC Removal":
+    show_toc_removal_page()
     
-elif page == "Анализ":
+elif page == "Analysis":
     show_analysis_page(st.session_state.resin_props)
     
-elif page == "Прогнозирование":
+elif page == "Prediction":
     show_prediction_interface(st.session_state.predictor)
     
-elif page == "Расширенный анализ":
+elif page == "Advanced Analysis":
     show_advanced_analysis(st.session_state.ion_states)
+
+elif page == "Glossary":
+    show_glossary_page()
     
-elif page == "Импорт/Экспорт":
+elif page == "Import/Export":
     show_import_export_page(st.session_state.resin_props, st.session_state.ion_states)
 
 # Add footer
 st.sidebar.markdown("---")
 st.sidebar.info(
     """
-    ### О приложении
-    Версия 1.0.0  
-    Разработано для исследования ионного обмена  
+    ### About the App
+    Version 1.0.0
+    Developed for ion exchange research
     2023
     """
 )

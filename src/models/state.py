@@ -1,14 +1,41 @@
 """
-Data classes for representing the computational state of the resin simulation.
+Data classes for representing the resin properties and the computational state of the resin simulation.
 """
+import json
 from dataclasses import dataclass, asdict
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
 
+@dataclass
+class Resin:
+    """
+    Represents the physical and chemical properties of a specific ion-exchange resin.
+    """
+    name: str
+    manufacturer: str
+    type: str
+    structure: str
+    functional_group: str
+    ionic_form: str
+    anion_exchange_capacity_min_meq_ml: Optional[float] = None
+    anion_exchange_capacity_max_meq_ml: Optional[float] = None
+    specific_volume_g_ml: Optional[str] = None
+    water_retention_capacity_percent: Optional[str] = None
+    mean_diameter_um: Optional[float] = None
+    uniformity_coefficient: Optional[float] = None
+    max_temp_c: Optional[int] = None
+    mercury_capacity_g_dm3: Optional[float] = None
+
+    @classmethod
+    def load_from_json(cls, filepath: str) -> List['Resin']:
+        """Loads a list of resins from a JSON file."""
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+        return [cls(**resin_data) for resin_data in data]
 
 @dataclass
 class ComputationalState:
     """
-    Represents the state of the resin with various physical and chemical properties.
+    Represents the calculated state of the resin with various physical and chemical properties.
     
     Attributes:
         conductivity: Electrical conductivity (σ)
@@ -32,7 +59,7 @@ class ComputationalState:
     tribological_performance: float = 0.0  # μ_eff (friction coefficient)
     optical_quality: float = 0.0      # Q_optical (reflection quality)
     
-    # New properties
+    # Properties from previous model
     swelling_ratio: float = 1.0          # Degree of swelling (volume ratio)
     mechanical_strength: float = 1.0     # Mechanical strength (relative units)
     ion_diffusion_rate: float = 1.0      # Ion diffusion rate
